@@ -1,0 +1,24 @@
+pipeline{
+    agent any
+     tools{
+        maven 'local_maven'
+     }
+    stages{
+        stage ('Build'){
+            steps{
+                sh 'mvn clean package'
+            }
+            post{
+                success{
+                    echo "Archiving the Artifcats"
+                    archiveArtifacts artifacts '**/test_jenkins/*.war'
+                }
+            }
+        }
+        stage ('Deploy to tomcat server'){
+             steps{
+           deploy adapters: [tomcat9(credentialsId: 'cd2ac5cc-ce21-4176-8287-ff964dfa0511', path: '', url: 'http://192.168.1.247:8080/')], contextPath: null, war: '**/*.war'
+           }
+        }
+    }
+}
