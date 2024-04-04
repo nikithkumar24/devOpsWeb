@@ -25,7 +25,7 @@ stages{
             parallel{
                 stage ("Deploy to Staging"){
                     steps {
-                        sh "scp -v -o StrictHostKeyChecking=no **/*.war root@${params.staging_server}:/opt/tomcat/webapps/"
+                        deploy adapters: [tomcat9(credentialsId: 'cd2ac5cc-ce21-4176-8287-ff964dfa0511', path: '', url: 'http://192.168.1.247:8080/')], contextPath: null, war: '**/*.war'
                     }
                 }
             }
